@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>你畫我猜</title>
+</head>
+<body>
+    <div id="setting">
+        <label for="settopic">主題</label>
+        <input type="text" placeholder="ex: 進擊的巨人" id="settopic">
+        <!-- <label for="teamname"></label>
+        <input type="text" placeholder="請輸入隊伍名稱"> -->
+        <label for="gametime">每局時長 &lpar;秒&rpar;</label>
+        <input type="range" id="gametime" min="40" max="240" step="10">
+        <p id="gametimeval"></p>
+    </div>
+    <div id="topic"></div>
+    <div id="team"></div>
+    <div id="score"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
