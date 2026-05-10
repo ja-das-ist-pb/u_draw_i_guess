@@ -1,19 +1,11 @@
-from fastapi import FastAPI, Request
-from pydantic import BaseModel
 from google import genai
 import ast
-
-app = FastAPI()
 
 apiKey = "AIzaSyBkE5a6sW2HTuhDmBXaActTSlBiN54cgmU"
 client = genai.Client(api_key=apiKey)
 
-class TopicRequest(BaseModel):
-    topic:str
-    
-def create_content(topic):
-    return f"""
-主題：{topic}
+content = """
+主題：家具
 
 我們在玩一個團隊遊戲，需要由一個人負責猜，其餘人看著題目，講出相近的意思，或者其他提示，引導猜題目的人猜中題目。
 
@@ -22,18 +14,10 @@ def create_content(topic):
 請確保你只會輸出這兩百組詞語，並且這些詞語內不能有空格、將這些詞語以json格式輸出給我，並把他們裝在一個array裡面（直接從[開始輸出，並以]為輸出的最後一個字元，謝謝
 """
 
-@app.post("/newtopic")
-def topic(req:TopicRequest):
-    data = req.model_dump()
-    topic = data["topic"]
-    content = create_content(topic)
-    response = client.models.generate_content(
-        model="gemini-2.5-flash-lite",
-        contents=content
-    )
-    
-    questions = ast.literal_eval(response.text[7:-3])
+response = client.models.generate_content(
+    model="gemini-2.5-flash-lite",
+    contents=content
+)
 
-    return questions
-    
-
+print(response.text)
+print(eval(response.text[7:-3]))
