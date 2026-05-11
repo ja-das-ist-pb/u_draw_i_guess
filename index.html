@@ -4,15 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>你畫我猜</title>
+    <link rel="stylesheet" href="style.css"></link>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/4.0.0/uicons-regular-chubby/css/uicons-regular-chubby.css'>    
 </head>
 <body>
+    <button onclick="showsetting" id="settingicon">
+        <i class="fi fi-rc-settings"></i>
+    </button>
     <div id="setting">
         <label for="settopic">主題</label>
         <input type="text" placeholder="ex: 進擊的巨人" id="settopic">
-        <!-- <label for="teamname"></label>
-        <input type="text" placeholder="請輸入隊伍名稱"> -->
-        <label for="gametime">每局時長 &lpar;秒&rpar;</label>
-        <input type="range" id="gametime" min="40" max="240" step="10">
+        <label for="gametime" id="showgametime"></label>
+        <input type="range" id="gametime" min="40" max="120" step="10">
         <p id="gametimeval"></p>
     </div>
     <div id="topic"></div>
@@ -20,6 +23,9 @@
     <div id="score"></div>
     <div id="resttime"></div>
     <div id="cards"></div>
+    <div id="message"></div>
+    <button>finish</button>
+    
 
     <script src="script.js"></script>
 </body>

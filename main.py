@@ -2,38 +2,34 @@ from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from google import genai
 import ast
+from .apikey import Keys
+from .content import generate_content
 
 app = FastAPI()
 
-apiKey = "AIzaSyBkE5a6sW2HTuhDmBXaActTSlBiN54cgmU"
-client = genai.Client(api_key=apiKey)
+
+clients = [genai.Client(api_key=apikey) for apikey in Keys]
 
 class TopicRequest(BaseModel):
     topic:str
-    
-def create_content(topic):
-    return f"""
-主題：{topic}
 
-我們在玩一個團隊遊戲，需要由一個人負責猜，其餘人看著題目，講出相近的意思，或者其他提示，引導猜題目的人猜中題目。
 
-你的工作是需要提供200組針對這個題目的詞語，且不能重複。例如，以進擊的巨人為主題，您可以提供：「艾爾迪亞王國」、「始祖巨人」、「地鳴」等等類似的詞語。
-
-請確保你只會輸出這兩百組詞語，並且這些詞語內不能有空格、將這些詞語以json格式輸出給我，並把他們裝在一個array裡面（直接從[開始輸出，並以]為輸出的最後一個字元，謝謝
-"""
+keyi = 0
 
 @app.post("/newtopic")
 def topic(req:TopicRequest):
     data = req.model_dump()
     topic = data["topic"]
-    content = create_content(topic)
-    response = client.models.generate_content(
+    response = clients[keyi].models.generate_content(
         model="gemini-2.5-flash-lite",
-        contents=content
+        contents=generate_content()
     )
+    keyi = (keyi + 1) % len(Keys)
     
     questions = ast.literal_eval(response.text[7:-3])
 
     return questions
-    
 
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=3333, reload=True)
